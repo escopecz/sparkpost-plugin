@@ -1,9 +1,9 @@
 ### Mautic Sparkpost Plugin
 
-This plugin enable Mautic 5 to run Sparkpost as a transport.
+This plugin enable Mautic 5 to run Sparkpost as an email transport. Features:
+- API transport. This transport can send up to 2000 emails per API request which makes it very fast compared to SMTP.
+- Bounce webhook handling. This plugin will unsubscribe contacts in Mautic based on the hard bounces while Sparkpost will take care of the soft bounce retrieals.
 
-#### Usage
-`composer require ts-navghane/sparkpost-plugin`
 
 #### Mautic Mailer DSN Scheme
 `mautic+sparkpost+api`
