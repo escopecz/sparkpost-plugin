@@ -1,5 +1,5 @@
 {
-    "name": "ts-navghane/sparkpost-plugin",
+    "name": "acquia/mc-cs-plugin-sparkpost",
     "description": "Sparkpost Mailer Plugin for Mautic",
     "type": "mautic-plugin",
     "license": "GPL-3.0-or-later",
