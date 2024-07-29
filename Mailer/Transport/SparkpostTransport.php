@@ -74,7 +74,7 @@ class SparkpostTransport extends AbstractApiTransport implements TokenTransportI
      * @throws DecodingExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
-     * @throws TransportExceptionInterface
+     * @throws TransportException
      */
     protected function doSendApi(SentMessage $sentMessage, Email $email, Envelope $envelope): ResponseInterface
     {
@@ -92,8 +92,8 @@ class SparkpostTransport extends AbstractApiTransport implements TokenTransportI
             }
 
             return $response;
-        } catch (\Exception $e) {
-            throw new TransportException($e->getMessage());
+        } catch (TransportExceptionInterface $e) {
+            throw new TransportException($e->getMessage(), 0, $e);
         }
     }
 
