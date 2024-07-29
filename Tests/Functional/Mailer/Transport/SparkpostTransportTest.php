@@ -188,7 +188,7 @@ class SparkpostTransportTest extends MauticMysqlTestCase
             );
             $this->assertSame('', $recipient['substitution_data']['SIGNATURE']);
             $this->assertSame('Hello there!', $recipient['substitution_data']['SUBJECT']);
-            $this->assertSame($contactAddressWithoutDotPart.'.email',$recipient['substitution_data']['CONTACTFIELDEMAIL']);
+            $this->assertSame($contactAddressWithoutDotPart.'.email', $recipient['substitution_data']['CONTACTFIELDEMAIL']);
             $this->assertSame('', $recipient['substitution_data']['OWNERFIELDEMAIL']);
             $this->assertSame('', $recipient['substitution_data']['OWNERFIELDFIRSTNAME']);
             $this->assertSame('', $recipient['substitution_data']['OWNERFIELDLASTNAME']);
@@ -269,9 +269,10 @@ class SparkpostTransportTest extends MauticMysqlTestCase
                 // Sort recipients by recipient email address and then by contact email address
                 usort($jsonArray['recipients'], function ($a, $b) {
                     $emailComparison = strcmp($a['substitution_data']['CONTACTFIELDEMAIL'], $b['substitution_data']['CONTACTFIELDEMAIL']);
-                    if ($emailComparison === 0) {
+                    if (0 === $emailComparison) {
                         return strcmp($a['address']['email'], $b['address']['email']);
                     }
+
                     return $emailComparison;
                 });
 
