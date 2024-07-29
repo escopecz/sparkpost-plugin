@@ -97,8 +97,8 @@ class SparkpostTransportTest extends MauticMysqlTestCase
     {
         $segment = new LeadList();
         $segment->setName('Test Segment');
+        $segment->setPublicName('Test Segment');
         $segment->setAlias('test-segment');
-        $segment->setPublicName(true);
 
         $email = new Email();
         $email->setName('Test Email');
