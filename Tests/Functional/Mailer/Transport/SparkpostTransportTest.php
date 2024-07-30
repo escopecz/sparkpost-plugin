@@ -227,6 +227,7 @@ class SparkpostTransportTest extends MauticMysqlTestCase
                 // Options
                 $this->assertFalse($jsonArray['options']['open_tracking']);
                 $this->assertFalse($jsonArray['options']['click_tracking']);
+                $this->assertTrue($jsonArray['options']['transactional']);
 
                 // Substitution Data
                 $this->assertSame('Default Dynamic Content', $jsonArray['substitution_data']['DYNAMICCONTENTDYNAMICCONTENT1']);
@@ -345,7 +346,7 @@ class SparkpostTransportTest extends MauticMysqlTestCase
         Assert::assertSame('admin@mautic.test', $bodyArray['content']['reply_to']);
         Assert::assertSame('Hello there!', $bodyArray['content']['subject']);
         Assert::assertSame('This is test body for {{{ CONTACTFIELDEMAIL }}}!', $bodyArray['content']['text']);
-        Assert::assertSame(['open_tracking' => false, 'click_tracking' => false], $bodyArray['options']);
+        Assert::assertSame(['open_tracking' => false, 'click_tracking' => false, 'transactional' => true], $bodyArray['options']);
         Assert::assertSame('contact@an.email', $bodyArray['substitution_data']['CONTACTFIELDEMAIL']);
         Assert::assertSame('Hello there!', $bodyArray['substitution_data']['SUBJECT']);
         Assert::assertArrayHasKey('SIGNATURE', $bodyArray['substitution_data']);

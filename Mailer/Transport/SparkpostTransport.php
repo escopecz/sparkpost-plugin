@@ -144,6 +144,7 @@ class SparkpostTransport extends AbstractApiTransport implements TokenTransportI
             'options'     => [
                 'open_tracking'  => false,
                 'click_tracking' => false,
+                'transactional'  => !$email->getHeaders()->get('List-Unsubscribe-Post'),
             ],
         ];
     }
