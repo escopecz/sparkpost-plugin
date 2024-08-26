@@ -171,6 +171,11 @@ class SparkpostTransportTest extends MauticMysqlTestCase
             // Substitution Data
             $this->assertSame('Default Dynamic Content', $recipient['substitution_data']['DYNAMICCONTENTDYNAMICCONTENT1']);
             $this->assertMatchesRegularExpression(
+                '/https:\/\/localhost\/email\/unsubscribe\/[a-f0-9]{20,40}\/'.$contactAddressWithoutDotPart.'\.email\/[a-f0-9]*/',
+                $recipient['substitution_data']['LISTUNSUBSCRIBEHEADER']
+            );
+
+            $this->assertMatchesRegularExpression(
                 '/<a href="https:\/\/localhost\/email\/unsubscribe\/[a-f0-9]{20,40}\/'.$contactAddressWithoutDotPart.'\.email\/[a-f0-9]*">Unsubscribe<\/a> to no longer receive emails from us./',
                 $recipient['substitution_data']['UNSUBSCRIBETEXT']
             );
@@ -209,7 +214,7 @@ class SparkpostTransportTest extends MauticMysqlTestCase
                 $this->assertSame('value123', $jsonArray['content']['headers']['x-global-custom-header']);
                 $this->assertSame('Bulk', $jsonArray['content']['headers']['Precedence']);
                 $this->assertMatchesRegularExpression('/\d+/', $jsonArray['content']['headers']['X-EMAIL-ID'], 'X-EMAIL-ID does not match');
-                $this->assertMatchesRegularExpression('/https:\/\/localhost\/email\/unsubscribe\/[a-f0-9]{20,40}\/contact@(one|two)\.email\/[a-f0-9]*/', $jsonArray['content']['headers']['List-Unsubscribe'], 'List-Unsubscribe does not match');
+                $this->assertSame('{{{ LISTUNSUBSCRIBEHEADER }}}', $jsonArray['content']['headers']['List-Unsubscribe']);
                 $this->assertSame('List-Unsubscribe=One-Click', $jsonArray['content']['headers']['List-Unsubscribe-Post']);
                 $this->assertSame('<html lang="en"><head><title>Hello there!</title></head><body>Hello {{{ CONTACTFIELDEMAIL }}}!</br>{{{ UNSUBSCRIBETEXT }}}<img height="1" width="1" src="{{{ TRACKINGPIXEL }}}" alt="" /></body></html>', $jsonArray['content']['html']);
                 $this->assertSame('Dear {{{ CONTACTFIELDEMAIL }}}', $jsonArray['content']['text']);
@@ -227,8 +232,7 @@ class SparkpostTransportTest extends MauticMysqlTestCase
                 // Options
                 $this->assertFalse($jsonArray['options']['open_tracking']);
                 $this->assertFalse($jsonArray['options']['click_tracking']);
-                $this->assertTrue($jsonArray['options']['transactional']);
-
+                $this->assertFalse($jsonArray['options']['transactional']);
                 // Substitution Data
                 $this->assertSame('Default Dynamic Content', $jsonArray['substitution_data']['DYNAMICCONTENTDYNAMICCONTENT1']);
                 $this->assertMatchesRegularExpression('/<a href="https:\/\/localhost\/email\/unsubscribe\/[a-f0-9]{20,40}\/contact@(one|two)\.email\/[a-f0-9]*">Unsubscribe<\/a> to no longer receive emails from us./', $jsonArray['substitution_data']['UNSUBSCRIBETEXT'], 'UNSUBSCRIBETEXT does not match');
@@ -251,13 +255,12 @@ class SparkpostTransportTest extends MauticMysqlTestCase
                 Assert::assertSame(Request::METHOD_POST, $method);
                 Assert::assertSame('https://api.sparkpost.com/api/v1/transmissions/', $url);
                 $jsonArray = json_decode($options['body'], true);
-                // dd($options['body']);
                 $this->assertSame('Admin <admin@mautic.test>', $jsonArray['content']['from']);
                 $this->assertSame('Hello there!', $jsonArray['content']['subject']);
                 $this->assertSame('value123', $jsonArray['content']['headers']['x-global-custom-header']);
                 $this->assertSame('Bulk', $jsonArray['content']['headers']['Precedence']);
                 $this->assertMatchesRegularExpression('/\d+/', $jsonArray['content']['headers']['X-EMAIL-ID']);
-                $this->assertMatchesRegularExpression('/https:\/\/localhost\/email\/unsubscribe\/[a-f0-9]{20,40}\/contact@(one|two)\.email\/[a-f0-9]*/', $jsonArray['content']['headers']['List-Unsubscribe']);
+                $this->assertSame('{{{ LISTUNSUBSCRIBEHEADER }}}', $jsonArray['content']['headers']['List-Unsubscribe']);
                 $this->assertSame('List-Unsubscribe=One-Click', $jsonArray['content']['headers']['List-Unsubscribe-Post']);
                 $this->assertSame('<html lang="en"><head><title>Hello there!</title></head><body>Hello {{{ CONTACTFIELDEMAIL }}}!</br>{{{ UNSUBSCRIBETEXT }}}<img height="1" width="1" src="{{{ TRACKINGPIXEL }}}" alt="" /></body></html>', $jsonArray['content']['html']);
                 $this->assertSame('Dear {{{ CONTACTFIELDEMAIL }}}', $jsonArray['content']['text']);

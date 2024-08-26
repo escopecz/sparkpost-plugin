@@ -184,6 +184,8 @@ class SparkpostTransport extends AbstractApiTransport implements TokenTransportI
             }
         }
 
+        $result['List-Unsubscribe'] = '{{{ LISTUNSUBSCRIBEHEADER }}}';
+
         return $result;
     }
 
